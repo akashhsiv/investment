@@ -1,9 +1,7 @@
-
 fastapi
 uvicorn[standard]
 pandas
 yfinance
-pandas-ta==0.3.14b
 python-multipart
-numpy==1.24.3
-pandas==1.5.3
+numpy
+pandas

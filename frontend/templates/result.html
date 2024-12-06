@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Investment Summary</title>
+</head>
+
+<body>
+    <h1>Investment Summary</h1>
+    <table border="1">
+        <tr>
+            <th>Ticker</th>
+            <th>Date</th>
+            <th>Weightage</th>
+            <th>Adjusted Weightage</th>
+            <th>Open</th>
+            <th>Close</th>
+            <th>RSI</th>
+            <th>Shares Bought</th>
+        </tr>
+        {% for row in summary %}
+        <tr>
+            <td>{{ row["Ticker"] }}</td>
+            <td>{{ row["Date"] }}</td>
+            <td>{{ row["Weightage"] }}</td>
+            <td>{{ row["Adjusted Weightage"] }}</td>
+            <td>{{ row["Open"] }}</td>
+            <td>{{ row["Close"] }}</td>
+            <td>{{ row["RSI"] }}</td>
+            <td>{{ row["Shares Bought"] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <br>
+    <a href="{{ file_url }}" download>Download CSV</a>
+</body>
+
+</html>
