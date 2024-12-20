@@ -83,6 +83,17 @@ def process_investment(total_investment, start_date, end_date, stocks):
             lambda x: adjust_weightage_by_rsi(weightage, x)
         )
 
+        # shares
+        data["Shares"] = data.apply(
+            lambda row: (
+                "Not enough money"
+                if row["Close"].iloc[0] == 0
+                or row["Allocated Investment"].iloc[0] < row["Close"].iloc[0]
+                else row["Allocated Investment"].iloc[0] // row["Close"].iloc[0]
+            ),
+            axis=1,
+        )
+
         # Append results with additional investment details
         for index, row in data.iterrows():
             results.append(
@@ -94,6 +105,7 @@ def process_investment(total_investment, start_date, end_date, stocks):
                     "Open": row["Open"],
                     "Close": row["Close"],
                     "RSI": row["RSI"],
+                    "Shares"
                 }
             )
 
@@ -111,7 +123,7 @@ def process_investment(total_investment, start_date, end_date, stocks):
         "RSI",
     ]
     summary = summary[columns]
-    
+
     return summary
 
 # FastAPI route to handle investment requests

@@ -72,9 +72,11 @@ def adjust_weightage_by_rsi(weightage, rsi):
 # Adjusted start date for RSI calculation
 adjusted_start_date = start_date - pd.Timedelta(days=24)
 
+
 # Daily investment (total investment divided by the number of days)
 total_days = (end_date - start_date).days + 1
 daily_investment = total_investment / total_days
+
 
 # Results list for investment details
 results = []
@@ -108,7 +110,19 @@ for stock in stocks:
 
     # Daily allocated investment (based on daily_investment)
 
-    
+    data["Allocated Investment"] = (
+        (data["Adjusted Weightage"] / 100) * total_investment
+    )
+
+    data["Shares"] = data.apply(
+        lambda row: (
+            "Not enough money"
+            if row["Close"].iloc[0] == 0
+            or row["Allocated Investment"].iloc[0] < row["Close"].iloc[0]
+            else row["Allocated Investment"].iloc[0] // row["Close"].iloc[0]
+        ),
+        axis=1,
+    )
 
     # Append results with additional investment details
     for index, row in data.iterrows():
@@ -118,9 +132,11 @@ for stock in stocks:
                 "Date": index.date(),
                 "Weightage": weightage,
                 "Adjusted Weightage": row["Adjusted Weightage"].iloc[0],
+                "Allocated Investment": row["Allocated Investment"].iloc[0],
                 "Open": row["Open"].iloc[0],
                 "Close": row["Close"].iloc[0],
                 "RSI": row["RSI"].iloc[0],
+                "Shares": row["Shares"].iloc[0],
             }
         )
 
@@ -133,9 +149,11 @@ columns = [
     "Date",
     "Weightage",
     "Adjusted Weightage",
+    "Allocated Investment",
     "Open",
     "Close",
     "RSI",
+    "Shares"
 ]
 summary = summary[columns]
 # Calculate the sum of "Allocated Investment"
