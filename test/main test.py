@@ -9,7 +9,7 @@ try:
 
     # Validate date inputs
     start_date = pd.to_datetime(start_date)
-    end_date = pd.to_datetime(end_date) + pd.Timedelta(days=1)
+    end_date = pd.to_datetime(end_date)
 
     if start_date >= end_date:
         raise ValueError("Start date must be earlier than the end date.")
@@ -156,6 +156,13 @@ columns = [
     "Shares"
 ]
 summary = summary[columns]
+
+missing_columns = [col for col in columns if col not in summary.columns]
+if missing_columns:
+    print(f"Missing columns: {missing_columns}")
+else:
+    summary = summary[columns]
+
 # Calculate the sum of "Allocated Investment"
 # Save the summary to CSV
 summary.to_csv("investment_summarytst.csv", index=False)
